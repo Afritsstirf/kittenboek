@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kittenboek</title>
+  <meta name="description" content="Houd alles bij over je kitten: gewicht, dierenarts, dagboek, foto's en afspraken. Alles blijft op je eigen toestel.">
+  <meta name="theme-color" content="#D9467A">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="avatar" id="avatar"></div>
+      <div>
+        <h1 id="kname">Mijn kitten</h1>
+        <div class="sub" id="ksub"></div>
+      </div>
+      <button class="iconbtn" id="editProfile" type="button">Profiel</button>
+    </header>
+
+    <div class="stats" id="stats"></div>
+
+    <nav class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" data-tab="home" type="button">Overzicht</button>
+      <button class="tab" role="tab" data-tab="diary" type="button">Dagboek</button>
+      <button class="tab" role="tab" data-tab="weight" type="button">Gewicht</button>
+      <button class="tab" role="tab" data-tab="vet" type="button"><span class="long">Dierenarts</span><span class="short">Arts</span></button>
+      <button class="tab" role="tab" data-tab="photos" type="button">Foto's</button>
+      <button class="tab" role="tab" data-tab="agenda" type="button">Agenda</button>
+    </nav>
+
+    <main id="view"></main>
+  </div>
+
+  <div id="sheetRoot"></div>
+  <div id="selbar" class="selbar" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
