@@ -28,7 +28,10 @@ html{padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 img{max-width:100%}
 [hidden]{display:none!important}
-.wrap{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:20px 120px}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:20px 120px;position:relative;z-index:1}
+/* achtergrondfoto met een waas erover zodat de tekst leesbaar blijft */
+.bgphoto{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;pointer-events:none}
+.bgphoto::after{content:"";position:absolute;inset:0;background:var(--bg);opacity:.62}
 h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -162,6 +165,8 @@ tr.picked{outline:none;background:var(--accent-soft)}
 label.f{display:grid;gap:4px;font-weight:700;font-size:14px}
 label.f input,label.f textarea,label.f select{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 12px;width:100%}
 label.f textarea{min-height:110px;resize:vertical}
+label.check{display:flex;gap:10px;align-items:center;font-weight:700;font-size:14px}
+label.check input{width:20px;height:20px;accent-color:var(--accent)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 12px;font-weight:700}
 .chip[aria-pressed="true"]{border-color:var(--sky);background:var(--sky-soft)}

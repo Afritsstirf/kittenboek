@@ -1,6 +1,6 @@
 // Service worker: bewaart de app-bestanden zodat Kittenboek ook zonder internet opent.
 // Verhoog het versienummer als je bestanden aanpast, dan halen gebruikers de nieuwe versie op.
-const CACHE = 'kittenboek-v1';
+const CACHE = 'kittenboek-v2';
 const SHELL = [
   './',
   './index.html',

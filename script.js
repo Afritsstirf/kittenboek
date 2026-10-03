@@ -97,7 +97,7 @@ const idb = {
 };
 
 // ---------- toestand ----------
-const EMPTY_PROFILE = { name: '', arrived: today(), born: '', colour: '', chip: '', vetName: '', vetPhone: '', milestones: {}, avatar: '', hideDemo: false, lastBackup: '' };
+const EMPTY_PROFILE = { name: '', arrived: today(), born: '', colour: '', chip: '', vetName: '', vetPhone: '', milestones: {}, avatar: '', background: '', hideDemo: false, lastBackup: '' };
 let entries = [];
 let profile = { ...EMPTY_PROFILE };
 let storageOk = true;
@@ -168,6 +168,19 @@ async function hydratePhotos() {
   }
 }
 
+// Toont de achtergrondfoto uit het profiel (of verbergt ze).
+async function showBackground() {
+  const el = $('#bgphoto'), id = profile.background;
+  if (!id) { el.hidden = true; el.style.backgroundImage = ''; return; }
+  if (!photoUrls.has(id)) {
+    const blob = await idb.get('photos', id).catch(() => null);
+    if (!blob) { el.hidden = true; return; }
+    photoUrls.set(id, URL.createObjectURL(blob));
+  }
+  el.style.backgroundImage = 'url("' + photoUrls.get(id) + '")';
+  el.hidden = false;
+}
+
 // ---------- agenda: Google Agenda-link en .ics-bestand ----------
 const compact = s => s.replace(/[-:]/g, '');
 function eventTimes(e) {
@@ -208,6 +221,7 @@ async function exportBackup() {
   const photos = {};
   const ids = new Set(entries.map(e => e.photo).filter(Boolean));
   if (profile.avatar) ids.add(profile.avatar);
+  if (profile.background) ids.add(profile.background);
   for (const id of ids) {
     const b = await idb.get('photos', id).catch(() => null);
     if (b) photos[id] = await blobToDataUrl(b);
@@ -281,6 +295,7 @@ function renderHeader() {
   $('#kname').textContent = profile.name || 'Mijn kitten';
   document.title = profile.name ? profile.name + ' · Kittenboek' : 'Kittenboek';
   $('#avatar').innerHTML = profile.avatar ? imgTag(profile.avatar) : CAT_SVG;
+  showBackground();
   const days = daysBetween(profile.arrived || today(), today());
   const sub = [days < 0 ? 'Komt op ' + fmtDate(profile.arrived) : days === 0 ? 'Vandaag aangekomen!' : 'Dag ' + (days + 1) + ' bij ons'];
   if (profile.colour) sub.push(profile.colour);
@@ -552,6 +567,8 @@ function openProfile() {
     inp('p-chip', 'Chipnummer', p.chip, 'text', '15 cijfers') +
     '<div class="grid2">' + inp('p-vet', 'Dierenarts', p.vetName, 'text', 'Naam praktijk') + inp('p-vetphone', 'Telefoon dierenarts', p.vetPhone, 'tel') + '</div>' +
     '<label class="f">Profielfoto<input id="p-avatar" type="file" accept="image/*"></label>' +
+    '<label class="f">Achtergrondfoto' + (p.background ? ' (kies een nieuwe om te vervangen)' : '') + '<input id="p-bg" type="file" accept="image/*"></label>' +
+    (p.background ? '<label class="check"><input id="p-bgoff" type="checkbox"> Achtergrondfoto weghalen</label>' : '') +
     '<div class="err" id="err"></div><button class="btn pink" id="save" type="submit">Bewaren</button>' +
     '<hr class="divider"><h3>Back-up</h3>' +
     '<p class="muted" style="margin:0">Alles staat alleen op dit toestel. Met een back-up zet je het over naar een ander toestel, of haal je het terug als er iets misgaat.' + (p.lastBackup ? ' Laatste back-up: ' + fmtDate(p.lastBackup, { day: 'numeric', month: 'long', year: 'numeric' }) + '.' : '') + '</p>' +
@@ -588,10 +605,17 @@ function openProfile() {
     const v = id => $('#' + id).value.trim();
     const next = { ...profile, name: v('p-name'), arrived: v('p-arrived') || today(), born: v('p-born'), colour: v('p-colour'), chip: v('p-chip'), vetName: v('p-vet'), vetPhone: v('p-vetphone') };
     const file = $('#p-avatar').files[0];
+    const bgFile = $('#p-bg').files[0];
+    const oldAvatar = profile.avatar, oldBg = profile.background;
     $('#save').disabled = true;
     try {
-      if (file) { const old = profile.avatar; next.avatar = await savePhoto(file); await deletePhoto(old); }
+      if (file) next.avatar = await savePhoto(file);
+      if (bgFile) next.background = await savePhoto(bgFile);
+      else if ($('#p-bgoff')?.checked) next.background = '';
       profile = next; await store.saveProfile(); closeSheet(); toast('Profiel bewaard');
+      // oude foto's pas opruimen als het nieuwe profiel bewaard is
+      if (oldAvatar && oldAvatar !== next.avatar) await deletePhoto(oldAvatar);
+      if (oldBg && oldBg !== next.background) await deletePhoto(oldBg);
     } catch { $('#save').disabled = false; $('#err').textContent = 'Bewaren lukte niet. Probeer het zo nog eens.'; }
   };
 }

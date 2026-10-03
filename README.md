@@ -13,6 +13,7 @@ Een eenvoudige app om alles bij te houden over je nieuwe kitten: gewicht, dieren
 - **Foto's**: een fotoalbum. Foto's worden automatisch verkleind.
 - **Agenda**: afspraken om af te vinken, met één klik in **Google Agenda** of als **.ics-bestand** voor Apple- of Outlook-agenda. Er zijn ook suggesties voor vaccinaties, ontworming en meer.
 - **Selecteren en verwijderen** in elke rubriek.
+- **Eigen achtergrondfoto** van je kitten, met een zachte waas zodat alles leesbaar blijft (bij *Profiel*).
 - **Back-up** downloaden en terugzetten (bij *Profiel*).
 - Werkt op gsm en computer, in licht en donker thema, en **ook offline**.
 
