@@ -1,6 +1,6 @@
 # Kittenboek
 
-Een eenvoudige app om alles bij te houden over je nieuwe kitten: gewicht, dierenartsbezoeken, een dagboek, foto's en afspraken.
+Een eenvoudige app om alles bij te houden over je nieuwe lieve kitten: gewicht, dierenartsbezoeken, een dagboek, foto's en afspraken.
 
 **Probeer het meteen:** https://afritsstirf.github.io/kittenboek/
 
